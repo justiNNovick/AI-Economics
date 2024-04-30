@@ -210,14 +210,12 @@ __device__ AgentType GetAgentType(const int agent_id) {
 }
 
 __device__ float GetCRRAUtil(float consumption, float crra_param) {
-  // This version of the function uses CARA logic. The original CRRA logic is commented out.
-  // crra_param is currently not used in this CARA version but is kept for compatibility.
-  float cara_param = 0.5;  // Set cara param
-  float exponent = -cara_param * powf(consumption, 1 - crra_param);
-  exponent = fminf(fmaxf(exponent, -88.0f), 88.0f);
-  return (1 - expf(exponent)) / cara_param;
- // return -expf(-cara_param * consumption); // Use CARA logic
-  //return (powf(consumption + 1, 1.0 - crra_param) - 1.0) / (1.0 - crra_param);
+  float cara_param = 0.5;  // uncomment for CARA and hybrid
+  float exponent = -cara_param * powf(consumption, 1 - crra_param); //uncomment for hybrid
+  exponent = fminf(fmaxf(exponent, -88.0f), 88.0f); //uncomment for hybrid
+  return (1 - expf(exponent)) / cara_param; //uncomment for hybrid
+ // return -expf(-cara_param * consumption); // uncomment for CARA
+  //return (powf(consumption + 1, 1.0 - crra_param) - 1.0) / (1.0 - crra_param); // uncomment for CRRA
 }
 
 __global__ void CudaResetEnv(float *cs_state_arr, float *fm_state_arr,
